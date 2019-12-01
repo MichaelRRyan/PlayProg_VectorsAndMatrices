@@ -75,5 +75,5 @@ Vector2f Vector2f::operator*(int k)
 
 std::string Vector2f::toString()
 {
-	return "(" + std::to_string(x) + ", " + std::to_string(y) + ")";
+	return "{ " + std::to_string(x) + "f, " + std::to_string(y) + "f }";
 }
