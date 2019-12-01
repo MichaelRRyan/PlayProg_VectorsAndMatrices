@@ -5,10 +5,15 @@
 
 #include <iostream>
 #include "Vector2f.h"
+#include "Vector3f.h"
 
-void vector2Tests();
+void vector2Tests(); // Vector2 tests
 void vector2CheckValid(cube::Vector2f t_vector2, float t_idealX, float t_idealY, std::string t_testName); // Prints out whether or not the components of t_vector2 match the ideal x and y
-void vector2CheckValid(float t_value, float t_idealValue, std::string t_testName); // Prints out whether or not the components of t_value match the ideal value
+void vector2CheckValid(float t_value, float t_idealValue, std::string t_testName); // Prints out whether or not t_value matches the ideal value
+
+void vector3Tests(); // Vector2 tests
+void vector3CheckValid(cube::Vector3f t_vector2, float t_idealX, float t_idealY, float t_idealZ, std::string t_testName); // Prints out whether or not the components of t_vector3 match the ideal x, y and z
+void vector3CheckValid(float t_value, float t_idealValue, std::string t_testName); // Prints out whether or not t_value matches the ideal value
 
 //////////////////////////////////////////////////////////////////////////////////////
 int main()
@@ -108,5 +113,37 @@ void vector2CheckValid(float t_value, float t_idealValue, std::string t_testName
 	else
 	{
 		std::cout << "-- Vector2 " + t_testName + " test was unsuccessful." << std::endl;
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+void vector3Tests()
+{
+
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+void vector3CheckValid(cube::Vector3f t_vector3, float t_idealX, float t_idealY, float t_idealZ, std::string t_testName)
+{
+	if (t_vector3.x == t_idealX && t_vector3.y == t_idealY && t_vector3.z == t_idealZ)
+	{
+		std::cout << "| Vector3 " + t_testName + " test was successful." << std::endl;
+	}
+	else
+	{
+		std::cout << "-- Vector3 " + t_testName + " test was unsuccessful." << std::endl;
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+void vector3CheckValid(float t_value, float t_idealValue, std::string t_testName)
+{
+	if (t_value == t_idealValue)
+	{
+		std::cout << "| Vector3 " + t_testName + " test was successful." << std::endl;
+	}
+	else
+	{
+		std::cout << "-- Vector3 " + t_testName + " test was unsuccessful." << std::endl;
 	}
 }
