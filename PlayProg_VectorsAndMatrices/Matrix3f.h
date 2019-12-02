@@ -20,13 +20,6 @@ namespace cube
 
 		Vector3f operator *(Vector3f V1);
 
-		//Vector3f operator *(Vector3f V1, Matrix3f M1)
-		//{// An overloaded operator * to return the  product of the matrix by a vector
-		//	return { M1.A11 * V1.x + M1.A21 * V1.y + M1.A31 * V1.z,
-		//		M1.A12 * V1.x + M1.A22 * V1.y + M1.A32 * V1.z,
-		//		M1.A13 * V1.x + M1.A23 * V1.y + M1.A33 * V1.z };
-		//}
-
 		Matrix3f Transpose(Matrix3f M1);
 		
 		Matrix3f operator +(Matrix3f M);

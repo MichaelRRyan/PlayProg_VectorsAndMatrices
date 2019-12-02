@@ -89,7 +89,18 @@ Vector3f Vector3f::operator^(Vector3f V2)
 	return { y * V2.z - z * V2.y, z * V2.x - x * V2.z, x * V2.y - y * V2.x };
 }
 
+bool cube::Vector3f::operator==(Vector3f V)
+{
+	return (x == V.x && y == V.y && z == V.z);
+}
+
 std::string Vector3f::toString()
 {
-	return "(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ")";
+	return "{ " + std::to_string(x) + "f, " + std::to_string(y) + "f, " + std::to_string(z) + "f }";
+}
+
+std::ostream& cube::operator<<(std::ostream& t_ostream, Vector3f t_vector)
+{
+	t_ostream << "{ " + std::to_string(t_vector.x) + "f, " + std::to_string(t_vector.y) + "f, " + std::to_string(t_vector.z) + "f }";
+	return t_ostream;
 }

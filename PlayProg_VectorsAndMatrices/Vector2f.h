@@ -34,5 +34,6 @@ namespace cube
 		Vector2f operator *(int k);
 
 		std::string toString();
+		friend std::ostream& operator <<(std::ostream& t_ostream, Vector2f t_vector); // Overloaded << operator to print vector as a string
 	};
 }

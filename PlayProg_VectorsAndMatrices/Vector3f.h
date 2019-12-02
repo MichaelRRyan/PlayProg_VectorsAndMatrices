@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include <ostream>
+
 namespace cube
 {
 	class Vector3f
@@ -19,9 +21,6 @@ namespace cube
 		// Constructor 2
 		Vector3f(float x1, float y1, float z1);
 
-		//// Constructor 3
-		//Vector3(Vector3 &V);
-
 		float Length();
 		float LengthSquared();
 		void Normalise();
@@ -33,9 +32,11 @@ namespace cube
 		Vector3f operator *(double k);
 		Vector3f operator *(float k);
 		Vector3f operator *(int k);
-		Vector3f operator ^(Vector3f V2);
+		Vector3f operator ^(Vector3f V);
+		bool operator ==(Vector3f V);
 
 		std::string toString();
+		friend std::ostream& operator <<(std::ostream& t_ostream, Vector3f t_vector); // Overloaded << operator to print vector as a string
 	};
 }
 

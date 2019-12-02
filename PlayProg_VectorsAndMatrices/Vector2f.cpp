@@ -77,3 +77,9 @@ std::string Vector2f::toString()
 {
 	return "{ " + std::to_string(x) + "f, " + std::to_string(y) + "f }";
 }
+
+std::ostream& cube::operator<<(std::ostream& t_ostream, Vector2f t_vector)
+{
+	t_ostream << "{ " + std::to_string(t_vector.x) + "f, " + std::to_string(t_vector.y) + "f }";
+	return t_ostream;
+}
