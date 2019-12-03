@@ -18,15 +18,15 @@ namespace cube
 			float _A21, float _A22, float _A23,
 			float _A31, float _A32, float _A33);
 
-		Vector3f operator *(Vector3f V1);
-
-		Matrix3f Transpose(Matrix3f M1);
+		static Matrix3f Transpose(Matrix3f M1);
 		
 		Matrix3f operator +(Matrix3f M);
 		Matrix3f operator -(Matrix3f M);
 		Matrix3f operator *(float x);
+		friend Matrix3f operator *(float x, Matrix3f M1);
 		Matrix3f operator *(Matrix3f M);
-		
+		Vector3f operator *(Vector3f V1);
+		friend Vector3f operator *(Vector3f V1, Matrix3f M1);
 
 		static float Determinant(Matrix3f M1);
 		Vector3f Row(int i);

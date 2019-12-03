@@ -17,12 +17,32 @@ cube::Quaternion::Quaternion(float _w, Vector3f v)
 	w = _w; x = v.x; y = v.y; z = v.z;
 }
 
+float cube::Quaternion::getW() const
+{
+	return w;
+}
+
+float cube::Quaternion::getX() const
+{
+	return x;
+}
+
+float cube::Quaternion::getY() const
+{
+	return y;
+}
+
+float cube::Quaternion::getZ() const
+{
+	return z;
+}
+
 std::string cube::Quaternion::toString()
 {
 	return "(" + std::to_string(w) + "," + std::to_string(x) + "i," + std::to_string(y) + "j," + std::to_string(z) + "k)";
 }
 
-double cube::Quaternion::modulus()
+float cube::Quaternion::modulus()
 {
 	return sqrtf(w * w + x * x + y * y + z * z);
 }
@@ -119,6 +139,22 @@ Quaternion cube::Quaternion::operator*(int s)
 {
 	return Quaternion(w * static_cast<float>(s), x * static_cast<float>(s), y * static_cast<float>(s), z * static_cast<float>(s));
 }
+
+Quaternion cube::operator*(double s, Quaternion q1)
+{
+	return Quaternion(q1.w * s, q1.x * s, q1.y * s, q1.z * s);
+}
+
+Quaternion cube::operator*(float s, Quaternion q1)
+{
+	return Quaternion(q1.w * s, q1.x * s, q1.y * s, q1.z * s);
+}
+
+Quaternion cube::operator*(int s, Quaternion q1)
+{
+	return Quaternion(q1.w * s, q1.x * s, q1.y * s, q1.z * s);
+}
+
 
 Quaternion cube::Quaternion::operator*(Quaternion t_q)
 {

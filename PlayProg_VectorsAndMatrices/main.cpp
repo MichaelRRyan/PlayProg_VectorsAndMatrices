@@ -7,6 +7,7 @@
 #include "Vector2f.h"
 #include "Vector3f.h"
 #include "Matrix3f.h"
+#include "Quaternion.h"
 
 using namespace cube;
 
@@ -14,23 +15,25 @@ using namespace cube;
 void vector2Tests(); // Vector2 tests
 void vector3Tests(); // Vector3 tests
 void matrix3Tests(); // Matrix3 tests
+void quaternionTests(); // Quaternion tests
 
 void floatCheckValid(float t_value, float t_idealValue, std::string t_testName); // Prints out whether or not t_value matches the ideal value
 void vector2CheckValid(Vector2f t_vector2, float t_idealX, float t_idealY, std::string t_testName); // Prints out whether or not the components of t_vector2 match the ideal x and y
 void vector3CheckValid(Vector3f t_vector2, float t_idealX, float t_idealY, float t_idealZ, std::string t_testName); // Prints out whether or not the components of t_vector3 match the ideal x, y and z
 void matrix3CheckValid(Matrix3f t_matrix, Vector3f t_idealRow1, Vector3f t_idealRow2, Vector3f t_idealRow3, std::string t_testName);
+void quaternionCheckValid(Quaternion t_quaternion, float t_idealW , float t_idealX, float t_idealY, float t_idealZ, std::string t_testName);
 
 //////////////////////////////////////////////////////////////////////////////////////
 int main()
 {
 	// Run the tests
-	std::cout << "Vector2 Tests:" << std::endl;
+	std::cout << std::endl << "Vector2 Tests:" << std::endl;
 	vector2Tests();
 
-	std::cout << "Vector3 Tests:" << std::endl;
+	std::cout << std::endl << "Vector3 Tests:" << std::endl;
 	vector3Tests();
 
-	std::cout << "Matrix3 Tests:" << std::endl;
+	std::cout << std::endl << "Matrix3 Tests:" << std::endl;
 	matrix3Tests();
 
 	system("pause");
@@ -191,11 +194,111 @@ void matrix3Tests()
 	Matrix3f matrix3Three{ 1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f };
 	matrix3CheckValid(matrix3Three, { 1.0f, 2.0f, 3.0f }, { 4.0f, 5.0f, 6.0f }, { 7.0f, 8.0f, 9.0f }, "9 given values matrix");
 
-	// Multiply a matrix with a vector3
-	Vector3f vector3{ 1.0f, 2.0f, 3.0f };
+	// Matrix transpose
 	matrix3 = matrix3Two;
+	Matrix3f matrixResult = Matrix3f::Transpose(matrix3);
+	matrix3CheckValid(matrixResult, { 1.0f, 4.0f, 7.0f }, {2.0f, 5.0f, 8.0f }, { 3.0f, 6.0f, 9.0f }, "matrix transpose");
+
+	// Matrix plus matrix
+	matrixResult = matrix3 + matrix3Two;
+	matrix3CheckValid(matrixResult, { 2.0f, 4.0f, 6.0f }, { 8.0f, 10.0f, 12.0f }, { 14.0f, 16.0f, 18.0f }, "matrix plus matrix");
+
+	// Matrix minus matrix
+	matrixResult = matrix3 - matrix3Two;
+	matrix3CheckValid(matrixResult, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, "matrix minus matrix");
+
+	// Matrix multiplied by scalar
+	matrixResult = matrix3 * 2.0f;
+	matrix3CheckValid(matrixResult, { 2.0f, 4.0f, 6.0f }, { 8.0f, 10.0f, 12.0f }, { 14.0f, 16.0f, 18.0f }, "matrix multiplied by scalar");
+
+	// Scalar multiplied by matrix
+	matrixResult = 2.0f * matrix3;
+	matrix3CheckValid(matrixResult, { 2.0f, 4.0f, 6.0f }, { 8.0f, 10.0f, 12.0f }, { 14.0f, 16.0f, 18.0f }, "scalar multiplied by matrix");
+
+	// Matrix multiplied by matrix
+	matrix3Two = { 9.0f, 8.0f, 7.0f, 6.0f, 5.0f, 4.0f, 3.0f, 2.0f, 1.0f };
+	matrixResult = matrix3 * matrix3Two;
+	matrix3CheckValid(matrixResult, { 30.0f, 24.0f, 18.0f }, { 84.0f, 69.0f, 54.0f }, { 138.0f, 114.0f, 90.0f }, "matrix multiplied by matrix");
+	// Matrix Multiplied by a vector3
+	Vector3f vector3{ 1.0f, 2.0f, 3.0f };
 	Vector3f vectorResult = matrix3 * vector3;
-	//matrix3CheckValid(vectorResult, { 1.0f, 2.0f, 3.0f }, { 4.0f, 5.0f, 6.0f }, { 7.0f, 8.0f, 9.0f }, "9 given values matrix");
+	vector3CheckValid(vectorResult, 14.0f, 32.0f, 50.0f, "Matrix multiplied by vector3");
+
+	// Vector3 multiplied by matrix
+	vectorResult = vector3 * matrix3;
+	vector3CheckValid(vectorResult, 30.0f, 36.0f, 42.0f, "Vector3 multiplied by matrix");
+
+	// Matrix determinant
+	matrix3 = { 5.0, 2.0, 7.0, 3.0, 12.0, 4.0, 8.0, 1.0, 9.0 };
+	float floatResult = Matrix3f::Determinant(matrix3);
+	floatCheckValid(floatResult, -121.0f, "matrix determinant");
+
+	// Matrix row
+	vectorResult = matrix3.Row(0);
+	vector3CheckValid(vectorResult, 5.0f, 2.0f, 7.0f, "Matrix row");
+
+	// Matrix col
+	vectorResult = matrix3.Column(0);
+	vector3CheckValid(vectorResult, 5.0f, 3.0f, 8.0f, "Matrix col");
+
+
+
+	// Matrix inverse
+	matrix3 = { -5.0, 1.0, 4.0, -1.0, 1.0, 1.0, -4.0, 1.0, 3.0 };
+	matrixResult = Matrix3f::Inverse(matrix3);
+	matrix3CheckValid(matrixResult, {2.0f, 1.0f, -3.0f}, {-1.0f, 1.0f, 1.0f}, {3.0f, 1.0f, -4.0f}, "matrix inverse");
+
+	// Matrix rotation
+	matrixResult = Matrix3f::Rotation(45);
+	matrix3CheckValid(matrixResult, { 0.707106769f, 0.707106769f, 0.0f }, {-0.707106769 , 0.707106769, 0.0f }, { 0.0f, 0.0f, 1.0f}, "matrix rotation");
+
+	// Matrix translate
+	matrixResult = Matrix3f::Translate(20.0f, 20.0f);
+	matrix3CheckValid(matrixResult, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {20.0f, 20.0f, 1.0f}, "matrix translate");
+
+	// Matrix scale
+	matrixResult = Matrix3f::Scale(100.0f, 100.0f);
+	matrix3CheckValid(matrixResult, { 1.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f }, { 0.0f, 0.0f, 1.0f }, "matrix scale");
+
+	// Matrix negation operator
+	matrixResult = -matrix3;
+	matrix3CheckValid(matrixResult, { 5.0f, -1.0f, -4.0f }, { 1.0f, -1.0f, -1.0f }, { 4.0f, -1.0f, -3.0f }, "matrix negation operator");
+
+
+
+	// Matrix rotationX
+	matrixResult = Matrix3f::RotationX(45.0f);
+	matrix3CheckValid(matrixResult, { 1.0f, 0.0f, 0.0f }, { 0.0f, 0.707106769f, -0.707106769f }, { 0.0f, 0.707106769f, 0.707106769f }, "matrix rotation X");
+
+	// Matrix rotationY
+	matrixResult = Matrix3f::RotationY(45.0f);
+	matrix3CheckValid(matrixResult, { 0.707106769f, 0.0f, 0.707106769f }, { 0.0f, 1.0f, 0.0f }, { -0.707106769f, 0.0f, 0.707106769f }, "matrix rotation Y");
+
+	// Matrix rotationZ
+	matrixResult = Matrix3f::RotationZ(45.0f);
+	matrix3CheckValid(matrixResult, { 0.707106769f, -0.707106769f, 0.0f }, { 0.707106769f, 0.707106769f, 0.0f }, { 0.0f, 0.0f, 1.0f }, "matrix rotation Z");
+
+	// Matrix scale3D
+	matrixResult = Matrix3f::Scale3D(100.0f);
+	matrix3CheckValid(matrixResult, { 1.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f }, { 0.0f, 0.0f, 1.0f }, "matrix scale 3D");
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+void quaternionTests()
+{
+	// Zero quaternion constructer
+	Quaternion quaternion;
+	quaternionCheckValid(quaternion, 0.0f, 0.0f, 0.0f, 0.0f, "Zero quaternion constructer");
+
+	// Quaternion constructer with 4 given float values
+	Quaternion quaternionTwo{ 1.0f, 2.0f, 3.0f, 4.0f};
+	quaternionCheckValid(quaternion, 1.0f, 2.0f, 3.0f, 4.0f, "Quaternion constructer with 4 given values");
+
+	// Quaternion constructer with a given float and vector3
+	Quaternion quaternionThree{ 1.0f, Vector3f{ 2.0f, 3.0f, 4.0f } };
+	quaternionCheckValid(quaternion, 1.0f, 2.0f, 3.0f, 4.0f, "Quaternion constructer with given float and vector3 value");
+
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -247,5 +350,20 @@ void matrix3CheckValid(Matrix3f t_matrix, Vector3f t_idealRow1, Vector3f t_ideal
 	else
 	{
 		std::cout << "-- Matrix3 " + t_testName + " test was unsuccessful." << std::endl;
+	}
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////
+void quaternionCheckValid(Quaternion t_quaternion, float t_idealW, float t_idealX, float t_idealY, float t_idealZ, std::string t_testName)
+{
+	if (t_quaternion.getW() == t_idealW && t_quaternion.getX() == t_idealX
+		&& t_quaternion.getY() == t_idealY && t_quaternion.getZ() == t_idealZ)
+	{
+		std::cout << "| " + t_testName + " test was successful." << std::endl;
+	}
+	else
+	{
+		std::cout << "-- " + t_testName + " test was unsuccessful." << std::endl;
 	}
 }

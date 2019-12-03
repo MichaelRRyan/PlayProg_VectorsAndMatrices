@@ -20,9 +20,15 @@ namespace cube
 
 		Quaternion(float _w, Vector3f v);
 
+		// Getter functions
+		float getW() const;
+		float getX() const;
+		float getY() const;
+		float getZ() const;
+
 		std::string toString();
 
-		double modulus();
+		float modulus();
 		
 		Quaternion normalise();
 
@@ -47,6 +53,12 @@ namespace cube
 		Quaternion operator *(float s);
 		
 		Quaternion operator *(int s);
+
+		friend Quaternion operator *(double s, Quaternion q1);
+		
+		friend Quaternion operator *(float s, Quaternion q1);
+		
+		friend Quaternion operator *(int s, Quaternion q1);
 
 		Quaternion operator *(Quaternion t_q);
 	};

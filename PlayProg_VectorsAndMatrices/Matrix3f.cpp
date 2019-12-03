@@ -41,14 +41,6 @@ cube::Matrix3f::Matrix3f(float _A11, float _A12, float _A13, float _A21, float _
 	A33 = _A33;
 }
 
-
-Vector3f Matrix3f::operator*(Vector3f V1)
-{// An overloaded operator * to return the  product of the matrix by a vector
-	return { A11 * V1.x + A12 * V1.y + A13 * V1.z,
-		A21 * V1.x + A22 * V1.y + A23 * V1.z,
-		A31 * V1.x + A32 * V1.y + A33 * V1.z };
-}
-
 Matrix3f Matrix3f::Transpose(Matrix3f M1)
 {// a method to transpose a given matrix
 	return Matrix3f(M1.A11, M1.A21, M1.A31,
@@ -88,6 +80,13 @@ Matrix3f Matrix3f::operator*(float x)
 	return answer;
 }
 
+Matrix3f cube::operator*(float x, Matrix3f M1)
+{// An overloaded operator * to return the  product of the matrix by a scalar
+	return Matrix3f(M1.A11 * x, M1.A12 * x, M1.A13 * x,
+		M1.A21 * x, M1.A22 * x, M1.A23 * x,
+		M1.A31 * x, M1.A32 * x, M1.A33 * x);
+}
+
 Matrix3f Matrix3f::operator*(Matrix3f M)
 {// An overloaded operator * to return the  product of two matrix
 	Matrix3f answer;
@@ -106,6 +105,20 @@ Matrix3f Matrix3f::operator*(Matrix3f M)
 
 
 	return answer;
+}
+
+Vector3f Matrix3f::operator*(Vector3f V1)
+{// An overloaded operator * to return the  product of the matrix by a vector
+	return { A11 * V1.x + A12 * V1.y + A13 * V1.z,
+		A21 * V1.x + A22 * V1.y + A23 * V1.z,
+		A31 * V1.x + A32 * V1.y + A33 * V1.z };
+}
+
+Vector3f cube::operator*(Vector3f V1, Matrix3f M1)
+{// An overloaded operator * to return the  product of the matrix by a vector
+	return Vector3f(M1.A11 * V1.x + M1.A21 * V1.y + M1.A31 * V1.z,
+		M1.A12 * V1.x + M1.A22 * V1.y + M1.A32 * V1.z,
+		M1.A13 * V1.x + M1.A23 * V1.y + M1.A33 * V1.z);
 }
 
 float Matrix3f::Determinant(Matrix3f M1)
@@ -207,11 +220,11 @@ Matrix3f Matrix3f::Translate(float dx, float dy)
 Matrix3f Matrix3f::Scale(float dx, float dy)
 {
 	Matrix3f answer;
-	answer.A11 = (float)dx / 100;
+	answer.A11 = dx / 100;
 	answer.A12 = 0;
 	answer.A13 = 0;
 	answer.A21 = 0;
-	answer.A22 = (float)dy / 100;
+	answer.A22 = dy / 100;
 	answer.A23 = 0;
 	answer.A31 = 0;
 	answer.A32 = 0;
