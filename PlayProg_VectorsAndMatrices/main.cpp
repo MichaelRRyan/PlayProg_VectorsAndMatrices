@@ -39,6 +39,26 @@ int main()
 	std::cout << std::endl << "Quaternion Tests:" << std::endl;
 	quaternionTests();
 
+	// Extra tests
+	std::cout << std::endl << std::endl;
+
+	Vector3f vector1{ 0.0f, 2.0f, -5.0f };
+	Vector3f vector2{ -2.0f, -2.0f, -5.0f };
+	Vector3f vector3{ 2.0f, -2.0f, -5.0f };
+
+	std::cout << "Matrix rotation of 23.21 degrees: " << Matrix3f::RotationZ(23.21f) * vector3 << std::endl;
+
+	//std::cout << "Matrix rotation of 5 degrees: " << Matrix3f::RotationZ(5.0f) * vector3 << std::endl;
+
+	// Quaternion around Z axis 5 degrees
+	Quaternion q = { 0.0f, 0.0f, 0.0f, 1.0f };
+	std::cout << "Quaternion rotation of 5 degrees: " << q.rotate(vector3, 5) << std::endl;
+
+	// 5.3
+	std::cout << "v1 length: " << vector1.Length() << std::endl;
+
+	std::cout << "v2 length squared: " << vector2.LengthSquared() << std::endl;
+
 	system("pause");
 	return EXIT_SUCCESS;
 }
