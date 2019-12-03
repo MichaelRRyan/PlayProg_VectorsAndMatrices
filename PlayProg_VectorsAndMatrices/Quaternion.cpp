@@ -37,11 +37,6 @@ float cube::Quaternion::getZ() const
 	return z;
 }
 
-std::string cube::Quaternion::toString()
-{
-	return "(" + std::to_string(w) + "," + std::to_string(x) + "i," + std::to_string(y) + "j," + std::to_string(z) + "k)";
-}
-
 float cube::Quaternion::modulus()
 {
 	return sqrtf(w * w + x * x + y * y + z * z);
@@ -95,7 +90,7 @@ Quaternion cube::Quaternion::multiply(Quaternion _q)
 
 Quaternion cube::Quaternion::copy()
 {
-	return Quaternion(x, y, z, w);
+	return Quaternion(w, x, y, z);
 }
 
 Vector3f cube::Quaternion::rotate(Vector3f pt, int _angle)
@@ -155,7 +150,6 @@ Quaternion cube::operator*(int s, Quaternion q1)
 	return Quaternion(q1.w * s, q1.x * s, q1.y * s, q1.z * s);
 }
 
-
 Quaternion cube::Quaternion::operator*(Quaternion t_q)
 {
 	float nw = w * t_q.w - x * t_q.x - y * t_q.y - z * t_q.z;
@@ -163,4 +157,15 @@ Quaternion cube::Quaternion::operator*(Quaternion t_q)
 	float ny = w * t_q.y + y * t_q.w + z * t_q.x - x * t_q.z;
 	float nz = w * t_q.z + z * t_q.w + x * t_q.y - y * t_q.x;
 	return Quaternion(nw, nx, ny, nz);
+}
+
+std::string cube::Quaternion::toString()
+{
+	return "{ " + std::to_string(w) + ", " + std::to_string(x) + "i, " + std::to_string(y) + "j, " + std::to_string(z) + "k }";
+}
+
+std::ostream& cube::operator<<(std::ostream& t_ostream, Quaternion t_quaternion)
+{
+	t_ostream << t_quaternion.toString();
+	return t_ostream;
 }

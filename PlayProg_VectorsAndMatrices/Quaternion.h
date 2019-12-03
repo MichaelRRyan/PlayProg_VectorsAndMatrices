@@ -4,14 +4,15 @@
 #include <string>
 #include "Vector3f.h"
 
-const float PI{ 3.14159265359f };
+
 
 namespace cube
 {
 	class Quaternion
 	{
 	private:
-		float x, y, z, w;
+		static constexpr float PI{ 3.14159265359f };
+		float w, x, y, z;
 
 	public:
 		Quaternion();
@@ -25,8 +26,6 @@ namespace cube
 		float getX() const;
 		float getY() const;
 		float getZ() const;
-
-		std::string toString();
 
 		float modulus();
 		
@@ -61,6 +60,9 @@ namespace cube
 		friend Quaternion operator *(int s, Quaternion q1);
 
 		Quaternion operator *(Quaternion t_q);
+
+		std::string toString();
+		friend std::ostream& operator <<(std::ostream& t_ostream, Quaternion t_quaternion); // Overloaded << operator to print the quaternion as a string
 	};
 }
 

@@ -10,6 +10,8 @@ namespace cube
 {
 	class Matrix3f
 	{
+		static constexpr float PI{ 3.14159265359f };
+
 	public:
 		// Constructor 1 create a zero matrix
 		Matrix3f();

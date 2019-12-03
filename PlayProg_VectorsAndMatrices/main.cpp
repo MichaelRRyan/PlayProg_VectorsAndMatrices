@@ -36,6 +36,9 @@ int main()
 	std::cout << std::endl << "Matrix3 Tests:" << std::endl;
 	matrix3Tests();
 
+	std::cout << std::endl << "Quaternion Tests:" << std::endl;
+	quaternionTests();
+
 	system("pause");
 	return EXIT_SUCCESS;
 }
@@ -241,8 +244,6 @@ void matrix3Tests()
 	vectorResult = matrix3.Column(0);
 	vector3CheckValid(vectorResult, 5.0f, 3.0f, 8.0f, "Matrix col");
 
-
-
 	// Matrix inverse
 	matrix3 = { -5.0, 1.0, 4.0, -1.0, 1.0, 1.0, -4.0, 1.0, 3.0 };
 	matrixResult = Matrix3f::Inverse(matrix3);
@@ -250,7 +251,7 @@ void matrix3Tests()
 
 	// Matrix rotation
 	matrixResult = Matrix3f::Rotation(45);
-	matrix3CheckValid(matrixResult, { 0.707106769f, 0.707106769f, 0.0f }, {-0.707106769 , 0.707106769, 0.0f }, { 0.0f, 0.0f, 1.0f}, "matrix rotation");
+	matrix3CheckValid(matrixResult, { 0.707106769f, 0.707106769f, 0.0f }, {-0.707106769f, 0.707106769f, 0.0f }, { 0.0f, 0.0f, 1.0f}, "matrix rotation");
 
 	// Matrix translate
 	matrixResult = Matrix3f::Translate(20.0f, 20.0f);
@@ -263,8 +264,6 @@ void matrix3Tests()
 	// Matrix negation operator
 	matrixResult = -matrix3;
 	matrix3CheckValid(matrixResult, { 5.0f, -1.0f, -4.0f }, { 1.0f, -1.0f, -1.0f }, { 4.0f, -1.0f, -3.0f }, "matrix negation operator");
-
-
 
 	// Matrix rotationX
 	matrixResult = Matrix3f::RotationX(45.0f);
@@ -292,13 +291,104 @@ void quaternionTests()
 
 	// Quaternion constructer with 4 given float values
 	Quaternion quaternionTwo{ 1.0f, 2.0f, 3.0f, 4.0f};
-	quaternionCheckValid(quaternion, 1.0f, 2.0f, 3.0f, 4.0f, "Quaternion constructer with 4 given values");
+	quaternionCheckValid(quaternionTwo, 1.0f, 2.0f, 3.0f, 4.0f, "Quaternion constructer with 4 given values");
 
 	// Quaternion constructer with a given float and vector3
 	Quaternion quaternionThree{ 1.0f, Vector3f{ 2.0f, 3.0f, 4.0f } };
-	quaternionCheckValid(quaternion, 1.0f, 2.0f, 3.0f, 4.0f, "Quaternion constructer with given float and vector3 value");
+	quaternionCheckValid(quaternionThree, 1.0f, 2.0f, 3.0f, 4.0f, "Quaternion constructer with given float and vector3 value");
 
+	// Quaternion modulus
+	quaternion = quaternionTwo;
+	float floatResult = quaternion.modulus();
+	floatCheckValid(floatResult, 5.47722578f, "Quaternion modulus");
 
+	// Quaternion normalise
+	quaternion = { 1.0f, 1.0f, 1.0f, 1.0f };
+	Quaternion quaternionResult = quaternion.normalise();
+	quaternionCheckValid(quaternionResult, 0.5f, 0.5f, 0.5f, 0.5f, "Quaternion normalise");
+
+	// Quaternion conjugate
+	quaternion = { 1.0f, 2.0f, 3.0f, 4.0f };
+	quaternionResult = quaternion.conjugate();
+	quaternionCheckValid(quaternionResult, 1.0f, -2.0f, -3.0f, -4.0f, "Quaternion conjugate");
+
+	// Quaternion from axis angle
+	Vector3f axis{ 1.0f, 0.0f, 0.0f };
+	quaternion.fromAxisAngle(axis, 2.0f);
+	quaternionCheckValid(quaternion, 0.540302277f, 0.841470957f, -0.0f, -0.0f, "Quaternion from axis angle");
+
+	// Quaternion multipied by quaternion
+	quaternion = { 1.0f, 2.0f, 3.0f, 4.0f };
+	quaternionResult = quaternion.multiply(quaternionTwo);
+	quaternionCheckValid(quaternionResult, -28.0f, 4.0f, 6.0f, 8.0f, "Quaternion multiply function");
+
+	// Quaternion copy
+	quaternionResult = quaternion.copy();
+	quaternionCheckValid(quaternionResult, 1.0f, 2.0f, 3.0f, 4.0f, "Quaternion copy");
+
+	// Quaternion rotate
+	Vector3f point{ 1.0f, 1.0f, 1.0f };
+	quaternion = { 1.0f, 1.0f, 1.0f, 1.0f };
+	Vector3f vector3Result = quaternion.rotate(point, 90);
+	vector3CheckValid(vector3Result, 0.874999881f, 0.874999881f, 0.874999881f, "Quaternion rotate");
+
+	// Quaternion addition
+	quaternionResult = quaternion + quaternionThree;
+	quaternionCheckValid(quaternionResult, 2.0f, 3.0f, 4.0f, 5.0f, "Quaternion addition");
+
+	// Quaternion negation operator
+	quaternionResult = -quaternion;
+	quaternionCheckValid(quaternionResult, -1.0f, -1.0f, -1.0f, -1.0f, "Quaternion negation operator");
+
+	// Quaternion negation
+	quaternionResult = quaternion - quaternionThree;
+	quaternionCheckValid(quaternionResult, 0.0f, -1.0f, -2.0f, -3.0f, "Quaternion negation");
+
+	// Quaternion multiplied by double
+	quaternion = { 1.0f, 2.0f, 3.0f, 4.0f };
+	quaternionResult = quaternion * 2.0;
+	quaternionCheckValid(quaternionResult, 2.0f, 4.0f, 6.0f, 8.0f, "Quaternion multiplied by double");
+
+	// Quaternion multiplied by float
+	quaternion = { 1.0f, 2.0f, 3.0f, 4.0f };
+	quaternionResult = quaternion * 2.0f;
+	quaternionCheckValid(quaternionResult, 2.0f, 4.0f, 6.0f, 8.0f, "Quaternion multiplied by float");
+
+	// Quaternion multiplied by int
+	quaternion = { 1.0f, 2.0f, 3.0f, 4.0f };
+	quaternionResult = quaternion * 2;
+	quaternionCheckValid(quaternionResult, 2.0f, 4.0f, 6.0f, 8.0f, "Quaternion multiplied by int");
+
+	// Double multiplied by quaternion
+	quaternion = { 1.0f, 2.0f, 3.0f, 4.0f };
+	quaternionResult = 2.0 * quaternion;
+	quaternionCheckValid(quaternionResult, 2.0f, 4.0f, 6.0f, 8.0f, "Double multiplied by quaternion");
+
+	// float multiplied by quaternion
+	quaternion = { 1.0f, 2.0f, 3.0f, 4.0f };
+	quaternionResult = 2.0f * quaternion;
+	quaternionCheckValid(quaternionResult, 2.0f, 4.0f, 6.0f, 8.0f, "float multiplied by quaternion");
+
+	// int multiplied by quaternion
+	quaternion = { 1.0f, 2.0f, 3.0f, 4.0f };
+	quaternionResult = 2 * quaternion;
+	quaternionCheckValid(quaternionResult, 2.0f, 4.0f, 6.0f, 8.0f, "int multiplied by quaternion");
+
+	// Quaternion multipied by quaternion
+	quaternion = { 1.0f, 2.0f, 3.0f, 4.0f };
+	quaternionResult = quaternion * quaternionTwo;
+	quaternionCheckValid(quaternionResult, -28.0f, 4.0f, 6.0f, 8.0f, "Quaternion multipied by quaternion");
+
+	// Vector to string
+	if (quaternion.toString() == "{ 1.000000, 2.000000i, 3.000000j, 4.000000k }")
+	{
+		std::cout << "| quaternion to string test was successful." << std::endl;
+	}
+	else
+	{
+		std::cout << "-- quaternion to string test was unsuccessful." << std::endl;
+	}
+	std::cout << quaternion << std::endl;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
