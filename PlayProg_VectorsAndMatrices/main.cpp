@@ -47,11 +47,13 @@ int main()
 	Vector3f vector3{ 2.0f, -2.0f, -5.0f };
 
 	std::cout << "Matrix rotation of 23.21 degrees: " << Matrix3f::RotationZ(23.21f) * vector3 << std::endl;
+	std::cout << "Matrix rotation of 5.0 degrees: " << Matrix3f::RotationZ(5.0f) * vector3 << std::endl;
 
 	//std::cout << "Matrix rotation of 5 degrees: " << Matrix3f::RotationZ(5.0f) * vector3 << std::endl;
 
 	// Quaternion around Z axis 5 degrees
 	Quaternion q = { 0.0f, 0.0f, 0.0f, 1.0f };
+	std::cout << "Quaternion rotation of 23.21 degrees: " << q.rotate(vector3, 23.21) << std::endl;
 	std::cout << "Quaternion rotation of 5 degrees: " << q.rotate(vector3, 5) << std::endl;
 
 	// 5.3
